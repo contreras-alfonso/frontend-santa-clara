@@ -42,7 +42,7 @@
                   <div>
                     <q-icon size="25px" name="img:/svg/account.svg" />
                   </div>
-                  <!-- <div>{{ authStore.getUser?.name }}</div> -->
+                  <div v-if="!$q.screen.lt.md">{{ authStore.getUser?.name }}</div>
                   <q-menu>
                     <div style="min-width: 250px" class="q-pa-sm">
                       <q-btn
@@ -73,9 +73,9 @@
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { uid } from 'quasar';
-// import { useAuthStore } from 'src/stores/auth-store';
+import { useAuthStore } from 'src/stores/auth-store';
 
-// const authStore = useAuthStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 const list = ref({

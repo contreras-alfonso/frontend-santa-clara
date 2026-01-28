@@ -4,5 +4,5 @@ export interface ColumnTable {
   field: string;
   align?: 'left' | 'right' | 'center';
   sortable: boolean;
-  format?: (val: number) => string;
+  format?: (val: any) => any;
 }

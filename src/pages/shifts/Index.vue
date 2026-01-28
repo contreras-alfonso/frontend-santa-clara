@@ -3,7 +3,7 @@
     <div class="row items-center justify-center">
       <div class="col-md-11 col-12 q-gutter-y-md">
         <div class="row justify-between">
-          <Title :title="pluralTitle" />
+          <Title :title="`${pluralTitle} (${shiftStore.getAll.length})`" />
 
           <div class="row items-center q-col-gutter-x-md">
             <div v-if="!$q.screen.lt.sm">
@@ -139,8 +139,19 @@
                   <div class="q-table__grid-item-title">
                     {{ col.label }}
                   </div>
+
                   <div class="q-table__grid-item-value">
-                    {{ col.value }}
+                    <q-badge
+                      v-if="col.name === 'status'"
+                      class="q-px-sm q-py-xs"
+                      rounded
+                      :color="entityColorByStatus(col.value)"
+                      :label="col.value"
+                    />
+
+                    <span v-else>
+                      {{ col.value }}
+                    </span>
                   </div>
                 </div>
                 <div class="q-table__grid-item-row">

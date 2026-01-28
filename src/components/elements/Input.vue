@@ -89,7 +89,6 @@ const props = withDefaults(
 
     time?: string;
     lengthRequired?: number;
-    minLengthRequired?: number;
 
     mask?: string;
     prefix?: string;

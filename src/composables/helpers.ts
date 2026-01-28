@@ -40,13 +40,9 @@ export function useHelpers() {
     notifyError(data.msg ?? 'Error inesperado');
   };
 
-  const truncate = (value: string, limit: number): string => {
-    return value.length < limit ? value : value.slice(0, limit) + '...';
-  };
 
   return {
     onSpinner,
-    handleApiError,
-    truncate,
+    handleApiError
   };
 }

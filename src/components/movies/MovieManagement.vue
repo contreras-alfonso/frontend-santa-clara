@@ -33,6 +33,7 @@
               placeholder="Ejm: Toy Story 5"
               :outlined="true"
               :rules-config="['isRequired']"
+              max-length="255"
             />
 
             <label class="text-weight-bold text-subtitle1 col-12"
@@ -70,6 +71,7 @@
               color="grey-10"
               outlined
               label="Haz click o arrastra tu imágen aquí"
+              accept=".jpg,.jpeg,.png"
             >
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
@@ -167,7 +169,7 @@ const onClose = (): void => {
 
 const onSubmit = async () => {
   onSpinner(true);
-  const { id, name, publication_date, image, status } = localMovie.value;
+  const { id, name, publication_date, status } = localMovie.value;
 
   const formData = new FormData();
   formData.append('name', name);
@@ -175,7 +177,7 @@ const onSubmit = async () => {
   if (fileImage.value) {
     formData.append('image', fileImage.value);
   }
-  status ? formData.append('status', '1') : formData.append('status', '0');
+  formData.append('status', status ? '1' : '0');
 
   onSpinner(true);
   if (props.typeManagement === 'EDIT') {
@@ -230,11 +232,11 @@ watch(
         localMovie.value.image = null;
         localMovie.value.status = true;
       } else {
-        localMovie.value.id = props.movie?.id!;
-        localMovie.value.name = props.movie?.name!;
-        localMovie.value.publication_date = props.movie?.publication_date!;
-        localMovie.value.image = props.movie?.image!;
-        localMovie.value.status = props.movie?.status! ? true : false;
+        localMovie.value.id = props.movie?.id ?? null;
+        localMovie.value.name = props.movie?.name ?? '';
+        localMovie.value.publication_date = props.movie?.publication_date ?? '';
+        localMovie.value.image = props.movie?.image ?? '';
+        localMovie.value.status = props.movie?.status ? true : false;
       }
       fileImage.value = null;
       imagePreview.value = '';

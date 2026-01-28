@@ -169,9 +169,9 @@ watch(
         localShift.value.start_time = '';
         localShift.value.status = true;
       } else {
-        localShift.value.id = props.shift?.id!;
-        localShift.value.start_time = props.shift?.start_time!;
-        localShift.value.status = props.shift?.status! ? true : false;
+        localShift.value.id = props.shift?.id ?? null;
+        localShift.value.start_time = props.shift?.start_time ?? '';
+        localShift.value.status = props.shift?.status ? true : false;
       }
     }
   },

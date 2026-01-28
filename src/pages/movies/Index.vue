@@ -3,7 +3,7 @@
     <div class="row items-center justify-center">
       <div class="col-md-11 col-12 q-gutter-y-md">
         <div class="row justify-between">
-          <Title :title="pluralTitle" />
+          <Title :title="`${pluralTitle} (${movieStore.getAll.length})`" />
 
           <div class="row items-center q-col-gutter-x-md">
             <div v-if="!$q.screen.lt.sm">
@@ -155,10 +155,31 @@
                   <div class="q-table__grid-item-title">
                     {{ col.label }}
                   </div>
+
                   <div class="q-table__grid-item-value">
-                    {{ col.value }}
+                    <q-img
+                      v-if="col.name === 'image'"
+                      width="80px"
+                      style="height: 80px"
+                      fit="contain"
+                      spinner-color="grey"
+                      spinner-size="sm"
+                      :src="col.value || '/images/no-image.jpg'"
+                    />
+
+                    <q-badge
+                      v-else-if="col.name === 'status'"
+                      rounded
+                      :color="entityColorByStatus(col.value)"
+                      :label="col.value"
+                    />
+
+                    <span v-else>
+                      {{ col.value }}
+                    </span>
                   </div>
                 </div>
+
                 <div class="q-table__grid-item-row">
                   <div class="q-table__grid-item-title">Acciones</div>
                   <div class="q-table__grid-item-value">
@@ -247,7 +268,7 @@ import ConfirmDelete from 'src/components/shared/ConfirmDelete.vue';
 import MovieManagement from 'src/components/movies/MovieManagement.vue';
 
 const { handleApiError, onSpinner } = useHelpers();
-const { entityStatus, entityColorByStatus } = useFilters();
+const { entityStatus, entityColorByStatus, truncate } = useFilters();
 const { notifySuccess } = useNotify();
 const movieStore = useMovieStore();
 
@@ -297,6 +318,7 @@ const columns: ColumnTable[] = [
     field: 'name',
     align: 'center',
     sortable: true,
+    format: (val) => truncate(val, 80),
   },
   {
     name: 'image',
