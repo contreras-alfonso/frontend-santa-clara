@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-markup-table flat>
-      <thead>
+      <thead class="bg-grey-3">
         <tr>
           <th v-for="col in columns" :key="'header' + col" class="text-right">
             <q-skeleton animation="fade" type="text" class="bg-grey-3" />

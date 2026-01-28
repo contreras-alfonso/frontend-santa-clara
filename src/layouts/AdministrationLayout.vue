@@ -3,18 +3,18 @@
     <q-header class="bg-white" bordered>
       <div class="column">
         <div class="row items-center full-width q-px-md q-py-sm">
-          <div class="col-grow">
+          <!-- <div class="col-grow">
             <q-img
               @click="router.push('/')"
               class="cursor-pointer"
               spinner-color="grey"
               spinner-size="sm"
-              style="width: 100px"
-              src="/svg/logo.svg"
+              style="width: 50px"
+              src="/images/logo.jpg"
             />
-          </div>
+          </div> -->
 
-          <div class="col" v-if="$q.screen.gt.sm">
+          <div class="col">
             <div class="row justify-center q-col-gutter-x-sm">
               <div v-for="(page, index) in list.nav" :key="index">
                 <router-link :to="page.url" v-slot="{ isActive }">
@@ -47,7 +47,7 @@
                     <div style="min-width: 250px" class="q-pa-sm">
                       <q-btn
                         @click="router.push('/logout')"
-                        class="full-width bg-primary text-white"
+                        class="full-width bg-negative text-white"
                         icon="exit_to_app"
                         flat
                         label="Cerrar sesión"

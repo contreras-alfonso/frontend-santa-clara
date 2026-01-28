@@ -1,12 +1,12 @@
 <template>
-  <q-page padding>
+  <q-page class="q-pa-md">
     <div class="row items-center justify-center">
       <div class="col-md-11 col-12 q-gutter-y-md">
         <div class="row justify-between">
           <Title :title="pluralTitle" />
 
           <div class="row items-center q-col-gutter-x-md">
-            <div>
+            <div v-if="!$q.screen.lt.sm">
               <InputElement
                 :model-value="filter"
                 @update:model-value="(val: string) => (filter = val)"
@@ -30,6 +30,19 @@
               />
             </div>
           </div>
+        </div>
+
+        <div v-if="$q.screen.lt.sm">
+          <InputElement
+            :model-value="filter"
+            @update:model-value="(val: string) => (filter = val)"
+            dense
+            placeholder="Buscar"
+            icon-color="grey"
+            :outlined="true"
+            bg-color="white"
+            icon="search"
+          />
         </div>
 
         <TableSkeleton v-if="loading.page" :rows="6" :columns="3" />
@@ -134,9 +147,9 @@
                   <div class="q-table__grid-item-title">Acciones</div>
                   <div class="q-table__grid-item-value">
                     <div class="q-gutter-sm">
-                      <slot name="actions-table-movil" :row="props.row"></slot>
                       <q-chip
-                        class="q-py-md"
+                        @click="onHandleUpdate(props.row)"
+                        class="q-py-sm"
                         round
                         clickable
                         label="Editar"
@@ -144,7 +157,32 @@
                         color="primary"
                         text-color="white"
                         size="sm"
-                        @click="onHandleUpdate(props.row)"
+                      >
+                      </q-chip>
+
+                      <q-chip
+                        @click="onHandleUpdateStatus(props.row.id)"
+                        class="q-py-sm"
+                        round
+                        clickable
+                        label="Actualizar estado"
+                        :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
+                        color="deep-purple-5"
+                        text-color="white"
+                        size="sm"
+                      >
+                      </q-chip>
+
+                      <q-chip
+                        @click="onHandleDelete(props.row.id)"
+                        class="q-py-sm"
+                        round
+                        clickable
+                        label="Eliminar"
+                        icon="fa-regular fa-trash-can"
+                        color="negative"
+                        text-color="white"
+                        size="sm"
                       >
                       </q-chip>
                     </div>
@@ -280,7 +318,6 @@ const onHandleUpdate = (shift: Shift) => {
   dialogs.value.management.isOpen = true;
   dialogs.value.management.type = 'EDIT';
   dialogs.value.management.entity = shift;
-  console.log(dialogs.value.management.entity);
 };
 
 const onHandleAdd = () => {

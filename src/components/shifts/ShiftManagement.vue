@@ -13,7 +13,7 @@
         <q-card-section class="q-px-none q-pt-none">
           <div class="row items-center justify-between">
             <div class="col text-h5 text-weight-bold">
-              {{ typeManagement === 'CREATE' ? 'Nuevo' : 'Editar' }} turno
+              {{ typeManagement === 'CREATE' ? 'Nuevo' : 'Editar' }} {{ props.title }}
             </div>
             <q-btn @click="onClose" icon="close" color="grey-6" size="md" round flat />
           </div>
@@ -22,7 +22,7 @@
         <q-separator />
 
         <q-scroll-area class="col">
-          <q-card-section class="q-mt-md q-pa-none row">
+          <q-card-section class="q-mt-md q-pa-none row q-col-gutter-y-sm">
             <label class="text-weight-bold text-subtitle1 col-12"
               >Turno <span class="text-red">*</span></label
             >
