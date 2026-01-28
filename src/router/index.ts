@@ -33,5 +33,16 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
+  Router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+      if (typeof to?.meta?.title === 'string') {
+        document.title = `${to?.meta?.title ?? ''}`;
+      }
+    } else {
+      document.title = '';
+    }
+    next();
+  });
+
   return Router;
 });
