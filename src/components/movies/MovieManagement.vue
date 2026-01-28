@@ -8,7 +8,7 @@
     class="q-px-lg q-py-md"
     :width="$q.screen.xs ? 350 : 560"
   >
-    <q-form @submit="onSubmit" ref="formShift" class="full-height">
+    <q-form @submit="onSubmit" ref="formMovie" class="full-height">
       <div class="column justify-between full-height">
         <q-card-section class="q-px-none q-pt-none">
           <div class="row items-center justify-between">
@@ -159,7 +159,7 @@ const localMovie = ref<Movie>({
   shifts: [],
 });
 
-const formShift = ref<QForm | null>(null);
+const formMovie = ref<QForm | null>(null);
 const localIsOpen = ref(false);
 
 const onClose = (): void => {
@@ -216,7 +216,7 @@ const onCreate = async (formData: FormData) => {
 
 const onResetFormValidation = () => {
   setTimeout(() => {
-    formShift.value?.resetValidation();
+    formMovie.value?.resetValidation();
   }, 100);
 };
 

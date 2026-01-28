@@ -40,6 +40,11 @@ export const useMovieStore = defineStore('movie', {
       this.movies = this.movies.filter((movie) => movie.id !== id);
     },
 
+    async addShifts(id: number) {
+      await api.post<Movie>(`/api/movies/${id}/shifts`);
+      this.movies = this.movies.filter((movie) => movie.id !== id);
+    },
+
     updateInState(updatedMovie: Movie) {
       const index = this.movies.findIndex((s) => s.id === updatedMovie.id);
       if (index !== -1) {

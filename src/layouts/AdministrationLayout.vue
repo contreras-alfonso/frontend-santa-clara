@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-white" bordered>
+    <q-header class="bg-primary" bordered>
       <div class="column">
         <div class="row items-center full-width q-px-md q-py-sm">
           <!-- <div class="col-grow">
@@ -24,8 +24,8 @@
                     class="text-capitalize fw-400"
                     :label="page.title"
                     :class="{
-                      'bg-primary text-white': isActive,
-                      'text-black': !isActive,
+                      'bg-secondary text-white': isActive,
+                      'text-white': !isActive,
                     }"
                   />
                 </router-link>
@@ -42,7 +42,7 @@
                   <div>
                     <q-icon size="25px" name="img:/svg/account.svg" />
                   </div>
-                  <div v-if="!$q.screen.lt.md">{{ authStore.getUser?.name }}</div>
+                  <div v-if="!$q.screen.lt.md" class="text-white">{{ authStore.getUser?.name }}</div>
                   <q-menu>
                     <div style="min-width: 250px" class="q-pa-sm">
                       <q-btn

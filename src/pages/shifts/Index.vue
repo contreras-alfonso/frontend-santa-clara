@@ -107,7 +107,7 @@
                   <q-btn
                     @click="onHandleUpdateStatus(props.row.id)"
                     :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
-                    class="bg-deep-purple-5 text-white"
+                    class="bg-indigo text-white"
                     size="sm"
                     round
                   >
@@ -178,7 +178,7 @@
                         clickable
                         label="Actualizar estado"
                         :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
-                        color="deep-purple-5"
+                        color="indigo"
                         text-color="white"
                         size="sm"
                       >

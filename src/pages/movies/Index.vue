@@ -121,9 +121,21 @@
                   </q-btn>
 
                   <q-btn
+                    @click="onHandleAddShifts(props.row)"
+                    icon="more_time"
+                    class="bg-orange text-white"
+                    size="sm"
+                    round
+                  >
+                    <q-tooltip v-if="!$q.screen.lt.sm" class="bg-grey-8 shadow-1 text-center">
+                      Asignar turnos
+                    </q-tooltip>
+                  </q-btn>
+
+                  <q-btn
                     @click="onHandleUpdateStatus(props.row.id)"
                     :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
-                    class="bg-deep-purple-5 text-white"
+                    class="bg-indigo text-white"
                     size="sm"
                     round
                   >
@@ -204,7 +216,7 @@
                         clickable
                         label="Actualizar estado"
                         :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
-                        color="deep-purple-5"
+                        color="indigo"
                         text-color="white"
                         size="sm"
                       >
@@ -248,6 +260,12 @@
     :movie="dialogs.management.entity"
     @on-close="onCloseManagementDrawer"
   />
+
+  <AssignShifts
+    :is-open="dialogs.assignShifts.isOpen"
+    :movie="dialogs.assignShifts.entity"
+    @on-close="onCloseAddShiftsDrawer"
+  />
 </template>
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
@@ -259,6 +277,7 @@ import type { ColumnTable } from 'src/types/column-table';
 import type { Movie } from 'src/types/movie';
 import type { DeleteDialog } from 'src/types/delete-dialog';
 import type { ManagementDrawer } from 'src/types/management-drawer';
+import { useShiftStore } from 'src/stores/shift-store';
 import { useMovieStore } from 'src/stores/movie-store';
 import { useHelpers } from 'src/composables/helpers';
 import { useFilters } from 'src/composables/filters';
@@ -266,11 +285,13 @@ import { useNotify } from 'src/composables/notify';
 import TableSkeleton from 'src/components/shared/TableSkeleton.vue';
 import ConfirmDelete from 'src/components/shared/ConfirmDelete.vue';
 import MovieManagement from 'src/components/movies/MovieManagement.vue';
+import AssignShifts from 'src/components/movies/AssignShifts.vue';
 
 const { handleApiError, onSpinner } = useHelpers();
-const { entityStatus, entityColorByStatus, truncate } = useFilters();
+const { entityStatus, entityColorByStatus, truncate, formatDate } = useFilters();
 const { notifySuccess } = useNotify();
 const movieStore = useMovieStore();
+const shiftStore = useShiftStore();
 
 const $q = useQuasar();
 const { t } = useI18n();
@@ -278,12 +299,22 @@ const { t } = useI18n();
 const singularTitle = t('page.administration.movies.title', 1);
 const pluralTitle = t('page.administration.movies.title', 2);
 
-const dialogs = ref<{ delete: DeleteDialog; management: ManagementDrawer<Movie> }>({
+const dialogs = ref<{
+  delete: DeleteDialog;
+  management: ManagementDrawer<Movie>;
+  assignShifts: ManagementDrawer<Movie>;
+}>({
   delete: {
     isOpen: false,
     entityId: null,
   },
   management: {
+    isOpen: false,
+    type: 'CREATE',
+    entity: null,
+  },
+
+  assignShifts: {
     isOpen: false,
     type: 'CREATE',
     entity: null,
@@ -333,6 +364,7 @@ const columns: ColumnTable[] = [
     field: 'publication_date',
     align: 'center',
     sortable: true,
+    format: (val) => formatDate(val),
   },
   {
     name: 'status',
@@ -352,16 +384,24 @@ onMounted(async () => {
 
 const onLoad = async () => {
   loading.value.page = true;
-  await Promise.all([fetchAll()])
+  await Promise.all([fetchAllMovies(), fetchAllShifts()])
     .then(() => {})
     .finally(() => {
       loading.value.page = false;
     });
 };
 
-const fetchAll = async () => {
+const fetchAllMovies = async () => {
   try {
     await movieStore.fetchAll();
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+const fetchAllShifts = async () => {
+  try {
+    await shiftStore.fetchAll();
   } catch (error) {
     handleApiError(error);
   }
@@ -421,6 +461,15 @@ const onDeleteMovie = async () => {
 
 const onCloseManagementDrawer = () => {
   dialogs.value.management.isOpen = false;
+};
+
+const onHandleAddShifts = (movie: Movie) => {
+  dialogs.value.assignShifts.isOpen = true;
+  dialogs.value.assignShifts.entity = movie;
+};
+
+const onCloseAddShiftsDrawer = () => {
+  dialogs.value.assignShifts.isOpen = false;
 };
 
 watch(
