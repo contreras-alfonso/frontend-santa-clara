@@ -30,7 +30,7 @@ export function useHelpers() {
 
     if (data.errors && Object.keys(data.errors).length > 0) {
       const messages = Object.values(data.errors)
-        .map((msg) => `- ${msg}`)
+        .map((msg) => `${msg}`)
         .join('<br>');
 
       notifyError(messages, true);

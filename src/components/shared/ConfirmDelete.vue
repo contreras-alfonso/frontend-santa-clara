@@ -20,7 +20,7 @@
         <div class="column q-col-gutter-y-xs">
           <div class="row items-center justify-center">
             <q-avatar size="xl" class="bg-red-1">
-              <q-icon name="warning" size="sm" color="primary"></q-icon>
+              <q-icon name="warning" size="sm" color="negative"></q-icon>
             </q-avatar>
           </div>
           <div class="text-grey-9 text-weight-bold text-h6 text-center q-mt-md">
@@ -52,7 +52,7 @@
               <q-btn
                 @click="emit('onDelete')"
                 icon="fa-regular fa-trash-can"
-                class="full-width bg-primary text-white q-py-sm text-weight-regular"
+                class="full-width bg-negative text-white q-py-sm text-weight-regular"
                 flat
                 no-caps
                 label="Sí, continuar"

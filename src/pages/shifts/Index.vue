@@ -15,9 +15,7 @@
                 icon-color="grey"
                 :outlined="true"
                 bg-color="white"
-                border-black
                 icon="search"
-                is-square
               />
             </div>
 
@@ -51,7 +49,7 @@
           flat
         >
           <template v-slot:header="props" v-if="!($q.screen.xs || $q.screen.sm)">
-            <q-tr class="bg-secondary text-white" :props="props">
+            <q-tr class="bg-primary text-white" :props="props">
               <template v-for="col in props.cols" :key="col.name">
                 <q-th :props="props">
                   {{ col.label }}
@@ -84,7 +82,7 @@
                   <q-btn
                     @click="onHandleUpdate(props.row)"
                     icon="edit"
-                    class="bg-secondary text-white"
+                    class="bg-primary text-white"
                     size="sm"
                     round
                   >
@@ -108,7 +106,7 @@
                   <q-btn
                     @click="onHandleDelete(props.row.id)"
                     icon="fa-regular fa-trash-can"
-                    class="bg-primary text-white"
+                    class="bg-negative text-white"
                     size="sm"
                     round
                   >
@@ -143,7 +141,7 @@
                         clickable
                         label="Editar"
                         icon="edit"
-                        color="secondary"
+                        color="primary"
                         text-color="white"
                         size="sm"
                         @click="onHandleUpdate(props.row)"
@@ -167,10 +165,17 @@
     @on-delete="onDeleteShift"
     @on-close="onCloseDeleteDialog"
   />
+
+  <ShiftManagement
+    :is-open="dialogs.management.isOpen"
+    :title="singularTitle"
+    :type-management="dialogs.management.type"
+    :shift="dialogs.management.entity"
+    @on-close="onCloseManagementDrawer"
+  />
 </template>
 <script setup lang="ts">
 import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import InputElement from 'src/components/elements/Input.vue';
@@ -178,29 +183,35 @@ import Title from 'src/components/shared/Title.vue';
 import type { ColumnTable } from 'src/types/column-table';
 import type { Shift } from 'src/types/shift';
 import type { DeleteDialog } from 'src/types/delete-dialog';
+import type { ManagementDrawer } from 'src/types/management-drawer';
 import { useShiftStore } from 'src/stores/shift-store';
 import { useHelpers } from 'src/composables/helpers';
 import { useFilters } from 'src/composables/filters';
 import { useNotify } from 'src/composables/notify';
 import TableSkeleton from 'src/components/shared/TableSkeleton.vue';
 import ConfirmDelete from 'src/components/shared/ConfirmDelete.vue';
+import ShiftManagement from 'src/components/shifts/ShiftManagement.vue';
 
 const { handleApiError, onSpinner } = useHelpers();
 const { entityStatus, entityColorByStatus } = useFilters();
 const { notifySuccess } = useNotify();
 const shiftStore = useShiftStore();
 
-const router = useRouter();
 const $q = useQuasar();
 const { t } = useI18n();
 
 const singularTitle = t('page.administration.shifts.title', 1);
 const pluralTitle = t('page.administration.shifts.title', 2);
 
-const dialogs = ref<{ delete: DeleteDialog }>({
+const dialogs = ref<{ delete: DeleteDialog; management: ManagementDrawer<Shift> }>({
   delete: {
     isOpen: false,
     entityId: null,
+  },
+  management: {
+    isOpen: false,
+    type: 'CREATE',
+    entity: null,
   },
 });
 
@@ -223,14 +234,14 @@ const columns: ColumnTable[] = [
     label: 'Id',
     field: 'id',
     align: 'center',
-    sortable: false,
+    sortable: true,
   },
   {
     name: 'start_time',
     label: 'Turno',
     field: 'start_time',
     align: 'center',
-    sortable: false,
+    sortable: true,
   },
   {
     name: 'status',
@@ -265,12 +276,17 @@ const fetchAll = async () => {
   }
 };
 
-const onHandleUpdate = (product: Shift): void => {
-  console.log(product);
+const onHandleUpdate = (shift: Shift) => {
+  dialogs.value.management.isOpen = true;
+  dialogs.value.management.type = 'EDIT';
+  dialogs.value.management.entity = shift;
+  console.log(dialogs.value.management.entity);
 };
 
-const onHandleAdd = async () => {
-  await router.push('/administration/products/new');
+const onHandleAdd = () => {
+  dialogs.value.management.isOpen = true;
+  dialogs.value.management.type = 'CREATE';
+  dialogs.value.management.entity = null;
 };
 
 const onCloseDeleteDialog = () => {
@@ -308,8 +324,13 @@ const onDeleteShift = async () => {
       handleApiError(error);
     } finally {
       onSpinner(false);
+      onCloseDeleteDialog();
     }
   }
+};
+
+const onCloseManagementDrawer = () => {
+  dialogs.value.management.isOpen = false;
 };
 
 watch(

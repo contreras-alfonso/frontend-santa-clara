@@ -1,7 +1,7 @@
 export interface Shift {
-    id:         number;
+    id:         number | null;
     start_time: string;
-    status:     number;
-    created_at: Date;
-    updated_at: Date;
+    status:     number | boolean;
+    created_at?: Date;
+    updated_at?: Date;
 }

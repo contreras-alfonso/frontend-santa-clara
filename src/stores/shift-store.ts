@@ -20,27 +20,32 @@ export const useShiftStore = defineStore('shift', {
       return data;
     },
 
-    async create(formData: FormData) {
-      const { data } = await api.post<Shift>(`/api/shifts`, formData);
-      this.shifts.push(data);
+    async create(payload: Shift) {
+      const { data } = await api.post<Shift>(`/api/shifts`, payload);
+      this.shifts.unshift(data);
       return data;
     },
 
     async update(id: number, shift: Shift) {
       const { data } = await api.put<Shift>(`/api/shifts/${id}`, shift);
-      const findIndex = this.shifts.findIndex((shift) => shift.id === id);
-      if (findIndex !== -1) this.shifts[findIndex] = data;
+      this.updateInState(data);
     },
 
     async updateStatus(id: number) {
       const { data } = await api.put<Shift>(`/api/shifts/${id}/status`);
-      const findIndex = this.shifts.findIndex((shift) => shift.id === id);
-      if (findIndex !== -1) this.shifts[findIndex] = data;
+      this.updateInState(data);
     },
 
     async delete(id: number) {
       await api.delete<Shift[]>(`/api/shifts/${id}`);
       this.shifts = this.shifts.filter((shift) => shift.id !== id);
+    },
+
+    updateInState(updatedShift: Shift) {
+      const index = this.shifts.findIndex((s) => s.id === updatedShift.id);
+      if (index !== -1) {
+        this.shifts[index] = updatedShift;
+      }
     },
 
     clear() {
