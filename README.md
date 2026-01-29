@@ -1,43 +1,26 @@
-# Santa Clara App (frontend-santa-clara)
+# Proyecto Almacenes Santa Clara
 
-Movie and shifts application
+Aplicación construida con **Quasar Framework** y **Vue.js**
 
-## Install the dependencies
+## Requisitos
 
-```bash
-yarn
-# or
-npm install
+- **Node.js** 18+  
+- **npm**
+
+## Instalar Quasar CLI
+
+```sh
+npm i -g @quasar/cli
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+## Variables de entorno
 
-```bash
+Renombrar el archivo `.template.env` a `.env` y agregar las variables de entorno
+
+
+## Desarrollo
+
+_Ejecutar proyecto localmente_
+```sh
 quasar dev
 ```
-
-### Lint the files
-
-```bash
-yarn lint
-# or
-npm run lint
-```
-
-### Format the files
-
-```bash
-yarn format
-# or
-npm run format
-```
-
-### Build the app for production
-
-```bash
-quasar build
-```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
