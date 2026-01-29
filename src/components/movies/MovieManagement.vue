@@ -63,14 +63,14 @@
               </template>
             </q-input>
 
-            <label class="text-weight-bold text-subtitle1 col-12">Imágen</label>
+            <label class="text-weight-bold text-subtitle1 col-12">Imagen</label>
             <q-file
               v-model="fileImage"
               class="col-12"
               label-color="grey-9"
               color="grey-10"
               outlined
-              label="Haz click o arrastra tu imágen aquí"
+              label="Haz click o arrastra tu imagen aquí"
               accept=".jpg,.jpeg,.png"
             >
               <template v-slot:prepend>

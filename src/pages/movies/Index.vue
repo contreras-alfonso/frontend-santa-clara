@@ -366,7 +366,7 @@ const columns: ColumnTable[] = [
   },
   {
     name: 'image',
-    label: 'Imágen',
+    label: 'Imagen',
     field: 'image',
     align: 'center',
     sortable: false,
