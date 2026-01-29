@@ -17,6 +17,10 @@ npm i -g @quasar/cli
 
 Renombrar el archivo `.template.env` a `.env` y agregar las variables de entorno
 
+## Instalar dependencias
+```sh
+npm install
+```
 
 ## Desarrollo
 
