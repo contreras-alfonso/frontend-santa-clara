@@ -4,12 +4,7 @@
       <div class="column">
         <div class="row items-center full-width q-px-md q-py-sm">
           <div class="col-grow">
-            <q-img
-              spinner-color="grey"
-              spinner-size="sm"
-              width="40px"
-              src="/images/logo.jpg"
-            />
+            <q-img spinner-color="grey" spinner-size="sm" width="40px" src="/images/logo.jpg" />
           </div>
 
           <div class="col">
@@ -40,7 +35,9 @@
                   <div>
                     <q-icon size="25px" name="img:/svg/account.svg" />
                   </div>
-                  <div v-if="!$q.screen.lt.md" class="text-white">{{ authStore.getUser?.name }}</div>
+                  <div v-if="!$q.screen.lt.md" class="text-white">
+                    {{ getFirstTwoWordsFromFullName(authStore.getUser?.name ?? '') }}
+                  </div>
                   <q-menu>
                     <div style="min-width: 250px" class="q-pa-sm">
                       <q-btn
@@ -72,9 +69,11 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import { uid } from 'quasar';
 import { useAuthStore } from 'src/stores/auth-store';
+import { useFilters } from 'src/composables/filters';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const { getFirstTwoWordsFromFullName } = useFilters();
 
 const list = ref({
   nav: [

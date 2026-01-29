@@ -30,7 +30,13 @@ export function useFilters() {
 
     return format(date, pattern);
   };
+
+  const getFirstTwoWordsFromFullName = (fullName: string) => {
+    return fullName.trim().split(/\s+/).slice(0, 2).join(' ');
+  };
+
   return {
+    getFirstTwoWordsFromFullName,
     truncate,
     entityStatus,
     entityColorByStatus,
