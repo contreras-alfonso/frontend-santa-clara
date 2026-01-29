@@ -134,7 +134,7 @@
 
                   <q-btn
                     @click="onHandleUpdateStatus(props.row.id)"
-                    :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
+                    :icon="props.row.status === 1 ? 'lock_open' : 'lock'"
                     class="bg-indigo text-white"
                     size="sm"
                     round

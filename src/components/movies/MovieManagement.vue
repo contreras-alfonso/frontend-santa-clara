@@ -151,11 +151,11 @@ const fileImage = ref<File | null>(null);
 const imagePreview = ref<string>('');
 
 const localMovie = ref<Movie>({
-  id: props.movie?.id || null,
-  name: props.movie?.name || '',
-  publication_date: props.movie?.publication_date || '',
-  image: props.movie?.image || null,
-  status: props.movie?.status || true,
+  id: props.movie?.id ?? null,
+  name: props.movie?.name ?? '',
+  publication_date: props.movie?.publication_date ?? '',
+  image: props.movie?.image ?? null,
+  status: props.movie?.status ?? true,
   shifts: [],
 });
 

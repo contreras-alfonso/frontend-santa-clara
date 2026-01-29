@@ -2,6 +2,7 @@ import { defineStore, acceptHMRUpdate } from 'pinia';
 import { api } from 'boot/axios';
 import type { MovieState } from 'src/types/store/movie-state';
 import type { Movie } from 'src/types/movie';
+import type { AddShiftsPayload } from 'src/types/add-shifts-payload';
 
 export const useMovieStore = defineStore('movie', {
   state: (): MovieState => ({
@@ -40,9 +41,9 @@ export const useMovieStore = defineStore('movie', {
       this.movies = this.movies.filter((movie) => movie.id !== id);
     },
 
-    async addShifts(id: number) {
-      await api.post<Movie>(`/api/movies/${id}/shifts`);
-      this.movies = this.movies.filter((movie) => movie.id !== id);
+    async addShifts(id: number, payload: AddShiftsPayload) {
+      const { data } = await api.post<Movie>(`/api/movies/${id}/shifts`, payload);
+      this.updateInState(data);
     },
 
     updateInState(updatedMovie: Movie) {

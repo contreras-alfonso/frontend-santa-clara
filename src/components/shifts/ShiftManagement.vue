@@ -98,9 +98,9 @@ const props = defineProps<{
 }>();
 
 const localShift = ref<Shift>({
-  id: props.shift?.id || null,
-  start_time: props.shift?.start_time || '',
-  status: props.shift?.status || true,
+  id: props.shift?.id ?? null,
+  start_time: props.shift?.start_time ?? '',
+  status: props.shift?.status ?? true,
 });
 
 const formShift = ref<QForm | null>(null);

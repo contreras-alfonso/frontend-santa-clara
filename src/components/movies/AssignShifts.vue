@@ -22,9 +22,10 @@
         <q-scroll-area class="col">
           <q-card-section class="q-mt-md q-pa-none row q-col-gutter-y-sm">
             <div class="col-12">
-              <div class="row q-col-gutter-x-md">
+              <div class="row items-center q-col-gutter-x-md">
                 <div class="col-3">
                   <q-img
+                    height="100px"
                     fit="contain"
                     class="full-width"
                     spinner-color="grey"
@@ -43,12 +44,12 @@
               </div>
             </div>
 
-            <div>
+            <div class="col-12">
               <label class="text-weight-bold text-subtitle1 col-12">Selecciona los turnos:</label>
 
               <div>
                 <div class="row q-col-gutter-sm q-mt-sm">
-                  <div v-for="shift in shiftStore.getAll" :key="shift.id!" class="col-6">
+                  <div v-for="shift in orderedShifts" :key="shift.id!" class="col-4">
                     <q-card
                       flat
                       bordered
@@ -61,7 +62,7 @@
                       @click="toggleShift(shift)"
                     >
                       <q-card-section class="row items-center justify-between q-pa-sm">
-                        <div class="text-weight-medium">
+                        <div class="text-weight-medium non-selectable">
                           {{ shift.start_time }}
                         </div>
 
@@ -90,11 +91,12 @@
         <q-card-section class="q-px-none q-pb-none">
           <q-separator />
           <q-btn
+            :disable="isSubmitDisabled"
             class="full-width bg-primary text-white q-py-md"
             type="submit"
             flat
             color="primary"
-            label="guardar"
+            label="Asignar"
           />
         </q-card-section>
       </div>
@@ -103,14 +105,16 @@
 </template>
 <script setup lang="ts">
 import { QForm } from 'quasar';
-import { ref, watch } from 'vue';
-import type { Movie } from 'src/types/movie';
+import { computed, ref, watch } from 'vue';
 import { useHelpers } from 'src/composables/helpers';
 import { useNotify } from 'src/composables/notify';
 import { useMovieStore } from 'src/stores/movie-store';
 import { useShiftStore } from 'src/stores/shift-store';
 import { useFilters } from 'src/composables/filters';
-import { Shift } from 'src/types/shift';
+import type { Movie } from 'src/types/movie';
+import type { Shift } from 'src/types/shift';
+import type { MovieForm } from 'src/types/movie-form';
+import type { AddShiftsPayload } from 'src/types/add-shifts-payload';
 
 const { formatDate } = useFilters();
 const { notifySuccess } = useNotify();
@@ -125,16 +129,26 @@ const props = defineProps<{
   movie?: Movie | null;
 }>();
 
-const localMovie = ref<Movie>({
-  id: props.movie?.id || null,
-  name: props.movie?.name || '',
-  publication_date: props.movie?.publication_date || '',
-  image: props.movie?.image || null,
-  status: props.movie?.status || true,
+const localMovie = ref<MovieForm>({
+  id: props.movie?.id ?? null,
+  name: props.movie?.name ?? '',
+  publication_date: props.movie?.publication_date ?? '',
+  image: props.movie?.image ?? null,
+  status: props.movie?.status ?? true,
   shifts: [],
 });
 
-const localIsOpen = ref(true);
+const localIsOpen = ref(false);
+
+const isSubmitDisabled = computed(() => {
+  return localMovie.value.shifts.length === 0;
+});
+
+const orderedShifts = computed<Shift[]>(() => {
+  return [...shiftStore.getAll].sort((a, b) => {
+    return a.start_time.localeCompare(b.start_time);
+  });
+});
 
 const onClose = (): void => {
   localIsOpen.value = false;
@@ -145,12 +159,12 @@ const isSelected = (shiftId: number): boolean => {
   return localMovie.value.shifts.includes(shiftId);
 };
 
-const isDisabled = (shift: any): boolean => {
-  return shift.status === 0 && !isSelected(shift.id);
+const isDisabled = (shift: Shift): boolean => {
+  return shift.status === 0 && !isSelected(shift.id!);
 };
 
-const canToggle = (shift: any): boolean => {
-  return shift.status === 1 || isSelected(shift.id);
+const canToggle = (shift: Shift): boolean => {
+  return shift.status === 1 || isSelected(shift.id!);
 };
 
 const toggleShift = (shift: Shift): void => {
@@ -167,12 +181,18 @@ const toggleShift = (shift: Shift): void => {
 
 const onSubmit = async () => {
   onSpinner(true);
-  const { id, name, publication_date, status } = localMovie.value;
+  const { id, shifts } = localMovie.value;
+
+  const payload: AddShiftsPayload = { shifts };
 
   try {
-    const data = await movieStore.update(id, formData);
-    notifySuccess(` actualizada correctamente.`);
-    // emit('onSubmit', data);
+    await movieStore.addShifts(id!, payload);
+    if (shifts.length > 1) {
+      notifySuccess('Turnos asignados correctamente');
+    } else {
+      notifySuccess('Turno asignado correctamente');
+    }
+
     onClose();
   } catch (error) {
     handleApiError(error);
@@ -181,36 +201,42 @@ const onSubmit = async () => {
   }
 };
 
+const mapMovieToForm = (movie: Movie): MovieForm => ({
+  id: movie.id,
+  name: movie.name,
+  publication_date: movie.publication_date,
+  image: movie.image,
+  status: movie.status,
+  shifts: movie.shifts.map((shift) => shift.id!),
+});
+
 watch(
   () => props.isOpen,
   (val: boolean) => {
-    console.log(val);
     localIsOpen.value = val;
-    localMovie.value.image = props.movie?.image ?? '';
-    localMovie.value.name = props.movie?.name ?? '';
-    localMovie.value.publication_date = props.movie?.publication_date ?? '';
-    localMovie.value.status = props.movie?.status ?? false;
-    localMovie.value.shifts = props.movie?.shifts ?? [];
+
+    if (val && props.movie) {
+      localMovie.value = mapMovieToForm(props.movie);
+    }
   },
 );
 </script>
 <style lang="scss">
 .shift-card {
   transition: all 0.2s ease;
+}
+.shift-card.selected {
+  border-color: $positive;
+  background: rgba($positive, 0.08);
+}
 
-  &.selected {
-    border-color: $positive;
-    background: rgba($positive, 0.08);
-  }
+.shift-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-  &.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  &.locked {
-    border-color: $warning;
-    background: rgba($warning, 0.08);
-  }
+.shift-card.locked {
+  border-color: $negative;
+  background: rgba($negative, 0.08);
 }
 </style>

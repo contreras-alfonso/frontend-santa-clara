@@ -8,7 +8,11 @@ export default boot(({ router }) => {
     const requiresAuth = to.meta?.requiresAuth || false;
     const allowedRoles = (to.meta?.rol as string[]) ?? [];
 
-    await authStore.verify();
+    try {
+      await authStore.verify();
+    } catch {
+      return next('/login');
+    }
 
     if (to.path === '/') {
       if (authStore.isAuthenticated) {
