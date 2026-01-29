@@ -100,7 +100,7 @@
             </template>
 
             <label class="text-weight-bold text-subtitle1 col-12"
-              >Estado <span class="text-red">*</span></label
+              >Estado</label
             >
             <q-toggle
               v-model="localMovie.status"
@@ -113,11 +113,11 @@
         <q-card-section class="q-px-none q-pb-none">
           <q-separator />
           <q-btn
-            class="full-width bg-primary text-white q-py-md"
+            class="full-width bg-primary text-white q-py-md text-capitalize"
             type="submit"
             flat
             color="primary"
-            label="guardar"
+            :label="typeManagement === 'CREATE' ? 'Agregar' : 'Guardar cambios'"
           />
         </q-card-section>
       </div>

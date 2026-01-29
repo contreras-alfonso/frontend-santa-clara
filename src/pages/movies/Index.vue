@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-px-md q-py-lg">
     <div class="row items-center justify-center">
       <div class="col-md-11 col-12 q-gutter-y-md">
         <div class="row justify-between">
@@ -21,10 +21,10 @@
 
             <div>
               <q-btn
-                rounded
                 @click="onHandleAdd"
-                class="bg-primary text-white text-caption q-py-sm full-width"
+                class="bg-primary text-white q-py-sm full-width"
                 icon="add"
+                no-caps
                 :label="`Nueva ${singularTitle}`"
                 flat
               />
@@ -49,7 +49,7 @@
 
         <q-table
           v-else
-          class="q-mb-xl"
+          class="q-mb-xl q-mt-lg"
           :rows="rows"
           :columns="columns"
           :visible-columns="visible"
@@ -62,7 +62,7 @@
           flat
         >
           <template v-slot:header="props" v-if="!($q.screen.xs || $q.screen.sm)">
-            <q-tr class="bg-primary text-white" :props="props">
+            <q-tr class="bg-secondary text-black" :props="props">
               <template v-for="col in props.cols" :key="col.name">
                 <q-th :props="props">
                   {{ col.label }}
@@ -123,7 +123,7 @@
                   <q-btn
                     @click="onHandleAddShifts(props.row)"
                     icon="more_time"
-                    class="bg-orange text-white"
+                    class="bg-teal-5 text-white"
                     size="sm"
                     round
                   >
@@ -135,7 +135,7 @@
                   <q-btn
                     @click="onHandleUpdateStatus(props.row.id)"
                     :icon="props.row.status === 1 ? 'lock_open' : 'lock'"
-                    class="bg-indigo text-white"
+                    class="bg-orange text-white"
                     size="sm"
                     round
                   >
@@ -210,13 +210,26 @@
                       </q-chip>
 
                       <q-chip
+                        @click="onHandleAddShifts(props.row)"
+                        class="q-py-sm"
+                        round
+                        clickable
+                        label="Asignar turnos"
+                        icon="more_time"
+                        color="teal-5"
+                        text-color="white"
+                        size="sm"
+                      >
+                      </q-chip>
+
+                      <q-chip
                         @click="onHandleUpdateStatus(props.row.id)"
                         class="q-py-sm"
                         round
                         clickable
                         label="Actualizar estado"
                         :icon="props.row.status === 1 ? 'lock' : 'lock_open'"
-                        color="indigo"
+                        color="orange"
                         text-color="white"
                         size="sm"
                       >

@@ -1,18 +1,16 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-primary" bordered>
+    <q-header class="bg-primary">
       <div class="column">
         <div class="row items-center full-width q-px-md q-py-sm">
-          <!-- <div class="col-grow">
+          <div class="col-grow">
             <q-img
-              @click="router.push('/')"
-              class="cursor-pointer"
               spinner-color="grey"
               spinner-size="sm"
-              style="width: 50px"
+              width="40px"
               src="/images/logo.jpg"
             />
-          </div> -->
+          </div>
 
           <div class="col">
             <div class="row justify-center q-col-gutter-x-sm">
@@ -21,10 +19,10 @@
                   <q-btn
                     flat
                     rounded
-                    class="text-capitalize fw-400"
+                    class="fw-400 text-capitalize"
                     :label="page.title"
                     :class="{
-                      'bg-secondary text-white': isActive,
+                      'bg-white text-primary': isActive,
                       'text-white': !isActive,
                     }"
                   />

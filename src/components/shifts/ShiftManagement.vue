@@ -40,9 +40,9 @@
               <template v-slot:append>
                 <q-icon name="access_time" class="cursor-pointer">
                   <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-time color="secondary" v-model="localShift.start_time">
+                    <q-time color="primary" v-model="localShift.start_time">
                       <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Cerrar" color="secondary" flat />
+                        <q-btn v-close-popup label="Cerrar" color="primary" flat />
                       </div>
                     </q-time>
                   </q-popup-proxy>
@@ -51,7 +51,7 @@
             </q-input>
 
             <label class="text-weight-bold text-subtitle1 col-12"
-              >Estado <span class="text-red">*</span></label
+              >Estado</label
             >
             <q-toggle
               v-model="localShift.status"
@@ -67,8 +67,9 @@
             class="full-width bg-primary text-white q-py-md"
             type="submit"
             flat
+            no-caps
             color="primary"
-            label="guardar"
+            :label="typeManagement === 'CREATE' ? 'Agregar' : 'Guardar cambios'"
           />
         </q-card-section>
       </div>

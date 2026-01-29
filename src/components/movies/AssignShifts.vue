@@ -49,7 +49,11 @@
 
               <div>
                 <div class="row q-col-gutter-sm q-mt-sm">
-                  <div v-for="shift in orderedShifts" :key="shift.id!" class="col-4">
+                  <div
+                    v-for="shift in orderedShifts"
+                    :key="shift.id!"
+                    :class="{ 'col-6': $q.screen.lt.sm, 'col-4': !$q.screen.lt.sm }"
+                  >
                     <q-card
                       flat
                       bordered
@@ -95,6 +99,7 @@
             class="full-width bg-primary text-white q-py-md"
             type="submit"
             flat
+            no-caps
             color="primary"
             label="Asignar"
           />
