@@ -41,10 +41,7 @@
                 label="Correo"
                 :model-value="login.email"
                 @update:model-value="(val: string) => (login.email = val)"
-                :outlined="true"
                 time="1500"
-                bg-color="white"
-                border-black
                 :rules-config="['isRequired', 'isEmail']"
               />
             </div>
@@ -55,10 +52,7 @@
                 is-pwd
                 :model-value="login.password"
                 @update:model-value="(val: string) => (login.password = val)"
-                :outlined="true"
                 time="1500"
-                bg-color="white"
-                border-black
                 :rules-config="['isRequired']"
               />
             </div>
