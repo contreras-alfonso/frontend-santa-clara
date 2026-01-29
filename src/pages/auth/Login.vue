@@ -6,7 +6,7 @@
         <div class="full-width col-12 col-md-7 col-lg-8 full-height flex flex-center">
           <div class="q-pa-lg">
             <div class="row items-center justify-center q-gutter-x-md">
-              <div class="text-uppercase text-white text-h3 text-weight-bolder">
+              <div class="text-uppercase text-white text-h3 text-weight-bolder text-center">
                 Gestión de Películas
               </div>
             </div>
@@ -18,7 +18,7 @@
       </q-img>
     </div>
 
-    <div class="col-12 col-sm-12 col-md-5">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-5">
       <div
         :class="{ 'q-px-lg': $q.screen.lt.sm, 'q-px-xl': !$q.screen.lt.sm }"
         class="flex flex-center full-height"
